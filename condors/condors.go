@@ -15,12 +15,25 @@ func frontPage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
 	var facade facade
-	facade.Definition, _ = fetchDefinition(c)
+	var err1, err2 error
+	facade.Definition, err1 = fetchDefinition(c)
+	facade.takeError(err1)
+	facade.PageViews, err2 = getAndIncrementHitCount(c, "/")
+	facade.takeError(err2)
 	tmpl.Execute(w, &facade)
 }
 
 type facade struct {
 	Definition string
+	PageViews  int
+
+	Errors []error
+}
+
+func (facade *facade) takeError(err error) {
+	if err != nil {
+		facade.Errors = append(facade.Errors, err)
+	}
 }
 
 var tmpl = template.Must(template.New("foobar").Parse(`
@@ -35,6 +48,15 @@ var tmpl = template.Must(template.New("foobar").Parse(`
 		{{.Definition}}
 	</div>
 	
+	<div class="hit-count">
+		This page was viewed {{.PageViews}} times.
+	</div>
+
+	{{range .Errors}}
+		<div class="error">
+			{{.}}
+		</div>
+	{{end}}
   <body>
 </html>
 `))
