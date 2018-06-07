@@ -3,6 +3,8 @@ package condors
 import (
 	"html/template"
 	"net/http"
+
+	"google.golang.org/appengine"
 )
 
 func init() {
@@ -10,7 +12,15 @@ func init() {
 }
 
 func frontPage(w http.ResponseWriter, r *http.Request) {
-	tmpl.Execute(w, nil)
+	c := appengine.NewContext(r)
+
+	var facade facade
+	facade.Definition, _ = fetchDefinition(c)
+	tmpl.Execute(w, &facade)
+}
+
+type facade struct {
+	Definition string
 }
 
 var tmpl = template.Must(template.New("foobar").Parse(`
@@ -19,7 +29,11 @@ var tmpl = template.Must(template.New("foobar").Parse(`
     <title>The Condor observation fanclub</title>
   </head>
   <body>
-    <h1>Condor observation 2017</h1>
+	<h1>Condor observation 2017</h1>
+	
+	<div class="definition">
+		{{.Definition}}
+	</div>
 	
   <body>
 </html>
