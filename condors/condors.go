@@ -40,8 +40,10 @@ var tmpl = template.Must(template.New("foobar").Parse(`
 <html>
   <head>
     <title>The Condor observation fanclub</title>
+	<link rel="stylesheet" href="/static/condors.css" />
   </head>
   <body>
+	<img src="static/condor.jpg" />
 	<h1>Condor observation 2017</h1>
 	
 	<div class="definition">
@@ -54,7 +56,7 @@ var tmpl = template.Must(template.New("foobar").Parse(`
 
 	{{range .Errors}}
 		<div class="error">
-			{{.}}
+		  ⚠ {{.}}
 		</div>
 	{{end}}
   <body>

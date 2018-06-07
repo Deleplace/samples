@@ -1,0 +1,18 @@
+.definition {
+    margin: 1rem;
+    border-left: 4px solid #d7a802;
+    background-color: #fdeca9;
+    padding: 1.2rem;
+}
+
+.hit-count {
+    color: #777;
+}
+
+.error {
+    margin: 1rem;
+    border-left: 4px solid #f2344f;
+    background-color: #f2ada1;
+    padding: 1.2rem;
+    font-weight: bold;
+}
