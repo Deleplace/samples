@@ -41,6 +41,7 @@ var tmpl = template.Must(template.New("foobar").Parse(`
   <head>
     <title>The Condor observation fanclub</title>
 	<link rel="stylesheet" href="/static/condors.css" />
+	<link rel="SHORTCUT ICON" href="/static/favicon.png" />
   </head>
   <body>
 	<img src="static/condor.jpg" />
