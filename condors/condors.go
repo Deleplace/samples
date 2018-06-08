@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"google.golang.org/appengine"
+	"google.golang.org/appengine/log"
 )
 
 func init() {
@@ -23,18 +24,24 @@ func frontPage(w http.ResponseWriter, r *http.Request) {
 
 	RunConcurrent(
 		func() {
+			log.Infof(c, "Fetching Wikipedia definition: start...")
 			facade.Definition, err1 = fetchDefinition(c)
-			facade.takeError(err1)
+			facade.takeError(c, err1)
+			log.Infof(c, "Fetching Wikipedia definition: done.")
 		},
 
 		func() {
+			log.Infof(c, "Querying observations winner: start...")
 			facade.HasWinner, facade.WinningObservation, err2 = computeWinner(c, facade.Year)
-			facade.takeError(err2)
+			facade.takeError(c, err2)
+			log.Infof(c, "Querying observations winner: done.")
 		},
 
 		func() {
+			log.Infof(c, "Incrementing pageviews counter: start...")
 			facade.PageViews, err3 = getAndIncrementHitCount(c, "/")
-			facade.takeError(err3)
+			facade.takeError(c, err3)
+			log.Infof(c, "Incrementing pageviews counter: done.")
 		},
 	)
 
@@ -53,11 +60,17 @@ type facade struct {
 	Errors      []error
 }
 
-func (facade *facade) takeError(err error) {
+func (facade *facade) takeError(c context.Context, err error) {
 	if err != nil {
+		// Error will be displayed on rendered page
 		facade.errorsMutex.Lock()
 		facade.Errors = append(facade.Errors, err)
 		facade.errorsMutex.Unlock()
+
+		if c != nil {
+			// Error will also be logged server-side
+			log.Errorf(c, "%v", err)
+		}
 	}
 }
 
