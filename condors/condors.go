@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"sort"
+	"sync"
 
 	"google.golang.org/appengine"
 )
@@ -20,14 +21,22 @@ func frontPage(w http.ResponseWriter, r *http.Request) {
 	var err1, err2, err3 error
 	facade.Year = 2017
 
-	facade.Definition, err1 = fetchDefinition(c)
-	facade.takeError(err1)
+	RunConcurrent(
+		func() {
+			facade.Definition, err1 = fetchDefinition(c)
+			facade.takeError(err1)
+		},
 
-	facade.HasWinner, facade.WinningObservation, err2 = computeWinner(c, facade.Year)
-	facade.takeError(err2)
+		func() {
+			facade.HasWinner, facade.WinningObservation, err2 = computeWinner(c, facade.Year)
+			facade.takeError(err2)
+		},
 
-	facade.PageViews, err3 = getAndIncrementHitCount(c, "/")
-	facade.takeError(err3)
+		func() {
+			facade.PageViews, err3 = getAndIncrementHitCount(c, "/")
+			facade.takeError(err3)
+		},
+	)
 
 	tmpl.Execute(w, &facade)
 }
@@ -39,13 +48,16 @@ type facade struct {
 	HasWinner          bool
 	WinningObservation Observation
 
-	PageViews int
-	Errors    []error
+	PageViews   int
+	errorsMutex sync.Mutex
+	Errors      []error
 }
 
 func (facade *facade) takeError(err error) {
 	if err != nil {
+		facade.errorsMutex.Lock()
 		facade.Errors = append(facade.Errors, err)
+		facade.errorsMutex.Unlock()
 	}
 }
 
