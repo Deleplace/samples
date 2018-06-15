@@ -2,7 +2,8 @@ package condors
 
 import (
 	"context"
-	"log"
+
+	"google.golang.org/appengine/log"
 
 	"go.opencensus.io/exporter/stackdriver"
 	"go.opencensus.io/trace"
