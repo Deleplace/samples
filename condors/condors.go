@@ -22,28 +22,30 @@ func frontPage(w http.ResponseWriter, r *http.Request) {
 	var err1, err2, err3 error
 	facade.Year = 2017
 
-	RunConcurrent(
-		func() {
-			log.Infof(c, "Fetching Wikipedia definition: start...")
-			facade.Definition, err1 = fetchDefinition(c)
-			facade.takeError(c, err1)
-			log.Infof(c, "Fetching Wikipedia definition: done.")
-		},
+	c = span(c, "REMOTE CALLS", func() {
+		RunConcurrent(
+			func() {
+				log.Infof(c, "Fetching Wikipedia definition: start...")
+				facade.Definition, err1 = fetchDefinition(c)
+				facade.takeError(c, err1)
+				log.Infof(c, "Fetching Wikipedia definition: done.")
+			},
 
-		func() {
-			log.Infof(c, "Querying observations winner: start...")
-			facade.HasWinner, facade.WinningObservation, err2 = computeWinner(c, facade.Year)
-			facade.takeError(c, err2)
-			log.Infof(c, "Querying observations winner: done.")
-		},
+			func() {
+				log.Infof(c, "Querying observations winner: start...")
+				facade.HasWinner, facade.WinningObservation, err2 = computeWinner(c, facade.Year)
+				facade.takeError(c, err2)
+				log.Infof(c, "Querying observations winner: done.")
+			},
 
-		func() {
-			log.Infof(c, "Incrementing pageviews counter: start...")
-			facade.PageViews, err3 = getAndIncrementHitCount(c, "/")
-			facade.takeError(c, err3)
-			log.Infof(c, "Incrementing pageviews counter: done.")
-		},
-	)
+			func() {
+				log.Infof(c, "Incrementing pageviews counter: start...")
+				facade.PageViews, err3 = getAndIncrementHitCount(c, "/")
+				facade.takeError(c, err3)
+				log.Infof(c, "Incrementing pageviews counter: done.")
+			},
+		)
+	})
 
 	tmpl.Execute(w, &facade)
 }
