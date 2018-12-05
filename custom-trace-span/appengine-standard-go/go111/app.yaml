@@ -1,0 +1,9 @@
+runtime: go111
+
+handlers:
+
+- url: /static
+  static_dir: static
+- url: /
+  script: auto
+  secure: always
