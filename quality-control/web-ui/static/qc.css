@@ -1,0 +1,35 @@
+body {
+    background-color: #DED;
+}
+
+.setup2 {
+    background-image: url(QualityControl-setup2.png);
+    background-repeat: no-repeat;
+    width:767px;
+    height:700px;
+}
+
+#flash {
+    background-image: url(flash.png);
+    background-repeat: no-repeat;
+    width:767px;
+    height:700px;
+}
+
+.hidden {
+    display: none;
+}
+
+.sprite {
+    position: absolute;
+}
+
+#foot {
+    background-image: url(foot.png);
+    background-repeat: no-repeat;
+    transform-origin: bottom center;
+    width: 75px;
+    height: 101px;
+    left: 352px;
+    top: 200px;
+}
