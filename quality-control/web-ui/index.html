@@ -6,9 +6,39 @@
     <body>
         <h1>Quality control with Cloud AutoML Vision</h1>
         <div class="setup2" id="scene">
+            <!-- Scenery background -->
+            <div class="sprite" id="foot-holder-front"></div>
+            <div class="sprite" id="trash-front"></div>
+            <div class="sprite" id="packaging-door"></div>
+            <div class="sprite" id="automl-logo"></div>
+            <div class="sprite" id="vision-logo"></div>
+
+            <!-- Moving parts -->
             <div class="sprite hidden" id="flash"></div>
             <div class="sprite" id="foot"></div>
+            <div class="sprite hidden" id="mugshot">
+                <img id="mugshot-pic" />
+            </div>
+            <div class="sprite hidden" id="uploading-mugshot"></div>
+            <div class="sprite hidden" id="getting-prediction"></div>
         </div>
+        <form>
+            <h3>Prediction of label "DEFECT"</h3>
+            <label for="threshold">
+                Threshold
+                <input type="range" id="threshold" />
+                <span id="threshold-display-value">0.5</span>
+            </label>
+            <ul>
+                <li>
+                    A low threshold means that a lot of items will be regarded as defective. But trashing good items (false positives) costs money.
+                </li>
+                <li>
+                    A high threshold means that very few items will be regarded as defective. But shipping a defective item (false negative) decrease customer satisfaction.
+                </li>
+            </ul>
+        </form>
+        <input type="button" value="RESET" id="reset" />
     </body>
     <script src="static/qc.js"></script>
 </html>

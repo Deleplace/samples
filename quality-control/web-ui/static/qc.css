@@ -1,5 +1,5 @@
 body {
-    background-color: #DED;
+    background-color: white;
 }
 
 .setup2 {
@@ -14,6 +14,7 @@ body {
     background-repeat: no-repeat;
     width:767px;
     height:700px;
+    z-index: 20;
 }
 
 .hidden {
@@ -32,4 +33,100 @@ body {
     height: 101px;
     left: 352px;
     top: 200px;
+    z-index: 10;
+}
+
+#foot-holder-front {
+    background-image: url(foot-holder-front.png);
+    background-repeat: no-repeat;
+    background-size: 160px 70px;
+    width: 160px;
+    height: 70px;
+    left: 241px;
+    top: 300px;
+    z-index: 20;
+}
+
+#trash-front {
+    background-image: url(trash-front.png);
+    background-repeat: no-repeat;
+    width: 128px;
+    height: 138px;
+    left: 544px;
+    top: 400px;
+    z-index: 20;
+}
+
+#packaging-door {
+    background-image: url(packaging-door.png);
+    background-repeat: no-repeat;
+    width: 165px;
+    height: 130px;
+    left: 526px;
+    top: 193px;
+    z-index: 20;
+}
+
+#automl-logo{
+    background-image: url(cloud-automl-logo.png);
+    background-repeat: no-repeat;
+    background-size: 100px 100px;
+    width: 100px;
+    height: 100px;
+    left: 25px;
+    top: 70px;
+    z-index: 20;
+}
+
+#vision-logo{
+    background-image: url(cloud-vision-logo.png);
+    background-repeat: no-repeat;
+    background-size: 100px 100px;
+    width: 100px;
+    height: 100px;
+    left: 25px;
+    top: 170px;
+    z-index: 20;
+}
+
+#mugshot {
+    border: solid 2px #999;
+    width: 60px;
+    height: 40px;
+    overflow:hidden;
+    z-index: 20;
+}
+
+#mugshot-pic {
+    width: 60px;
+}
+
+#uploading-mugshot {
+    border-left: dotted 2px #44A;
+    left: 65px;
+    top: 260px;
+    width: 10px;
+    height: 105px;
+    z-index: 5;
+}
+
+#getting-prediction {
+    left: 120px;
+    top: 215px;
+    width: 190px;
+    height: 55px;
+    padding-left: 20px;
+    z-index: 5;
+}
+
+#getting-prediction.defect {
+    border-top: dotted 4px red;
+    border-right: dotted 4px red;
+    color: #500;
+}
+
+#getting-prediction.ok {
+    border-top: dotted 2px green;
+    border-right: dotted 2px green;
+    color: #050;
 }
