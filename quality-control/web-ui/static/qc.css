@@ -130,3 +130,16 @@ body {
     border-right: dotted 2px green;
     color: #050;
 }
+
+#curve {
+    width: 400px;
+    height: 100px;
+    left: 400px;
+    top: 650px;
+    border-bottom: solid 1px #AAA;
+    border-left: solid 1px #AAA;
+}
+
+#threshold {
+    width: 500px;
+}

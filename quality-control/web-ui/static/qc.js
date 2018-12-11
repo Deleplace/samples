@@ -6,18 +6,28 @@ let mugshotPic = document.getElementById("mugshot-pic");
 let uploadingMugshot = document.getElementById("uploading-mugshot");
 let gettingPrediction = document.getElementById("getting-prediction");
 let threshold = document.getElementById("threshold");
+let curve = document.getElementById("curve");
+
+// Init
 foot.firing = false;
 foot.rot = 0;
 let sprites = [];
 
 let t=0;
 let speed = 40; // in Hz
+let duration = 1600;
 let defectRate = 0.30;
+
+let truepos = 0;
+let falsepos = 0;
+let trueneg = 0;
+let falseneg = 0;
+let prevperf = -1;
 
 // next moves forward 1 animation step
 function next() {
     t++;
-    if(t==1000)
+    if(t==duration)
         return; // END
     if(Math.floor(t/20)%2 == 0) {
         // Move things along the assembly line
@@ -123,15 +133,24 @@ function takePicture(){
     let score = simulateDefectScore(ok);
     let detectedDefect = score > currentThreshold();
     gettingPrediction.score = score;
-    if(detectedDefect)
+    if(detectedDefect){
         gettingPrediction.innerHTML =
             score.toFixed(2) + " > " + currentThreshold() + "<br/>"
             + "score is above threshold <br/>"
             + "DEFECT detected";
-    else
+        if(ok)
+            falsepos ++;
+        else
+            truepos ++;
+    } else {
         gettingPrediction.innerHTML =
             score.toFixed(2) + " < " + currentThreshold() + "<br/>"
             + "score is below threshold";
+        if(ok)
+            trueneg ++;
+        else 
+            falseneg ++;
+    }
 
     window,setTimeout(function(){
         gettingPrediction.classList.remove("ok");
@@ -156,6 +175,7 @@ function takePicture(){
     window.setTimeout(function(){
         gettingPrediction.classList.add("hidden");
         gettingPrediction.innerHTML = "";
+        plotPerformanceCurve();
     }, 35000/speed);
 }
 
@@ -234,4 +254,19 @@ function simulateDefectScore(ok){
     // TODO plug on real AutoML Vision Predict API
 }
 
-fullScenario(20);
+function plotPerformanceCurve(){
+    let total = falsepos + truepos + falseneg + trueneg;
+    let correct = truepos + trueneg;
+    let perf = correct/total;
+    if(total>=2){
+        let x = t/5;
+        let ctx = curve.getContext('2d');
+        ctx.beginPath();       
+        ctx.moveTo(x-8, 100-100*prevperf);    
+        ctx.lineTo(x, 100-100*perf);
+        ctx.stroke();
+    }
+    prevperf = perf;
+}
+
+fullScenario(40);
