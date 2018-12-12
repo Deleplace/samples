@@ -132,8 +132,10 @@ body {
 }
 
 #curve {
-    width: 400px;
+    /*
+    width: 600px;
     height: 100px;
+    */
     left: 400px;
     top: 650px;
     border-bottom: solid 1px #AAA;
@@ -142,4 +144,25 @@ body {
 
 #threshold {
     width: 500px;
+}
+
+.warning {
+    font-weight: bold;
+    padding: 1rem;
+    background-color: white;
+    font-size: 2rem;
+}
+
+#warning-false-negative {
+    left: 700px;
+    top: 120px;
+    color: #700;
+    border: dashed #700 6px;
+}
+
+#warning-false-positive {
+    left: 660px;
+    top: 440px;
+    color: #A50;
+    border: dashed #A50 6px;
 }

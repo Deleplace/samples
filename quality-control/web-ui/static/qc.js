@@ -14,8 +14,9 @@ foot.rot = 0;
 let sprites = [];
 
 let t=0;
-let speed = 40; // in Hz
-let duration = 1600;
+let speed = 30; // in Hz
+let nItems = 70;
+let duration = nItems * 40;
 let defectRate = 0.30;
 
 let truepos = 0;
@@ -133,14 +134,18 @@ function takePicture(){
     let score = simulateDefectScore(ok);
     let detectedDefect = score > currentThreshold();
     gettingPrediction.score = score;
+
+    let isFalsePositive = false;
+    let isFalseNegative = false;
     if(detectedDefect){
         gettingPrediction.innerHTML =
             score.toFixed(2) + " > " + currentThreshold() + "<br/>"
             + "score is above threshold <br/>"
             + "DEFECT detected";
-        if(ok)
+        if(ok){
             falsepos ++;
-        else
+            isFalsePositive = true;
+        }else
             truepos ++;
     } else {
         gettingPrediction.innerHTML =
@@ -148,8 +153,10 @@ function takePicture(){
             + "score is below threshold";
         if(ok)
             trueneg ++;
-        else 
+        else{
+            isFalseNegative = true;
             falseneg ++;
+        }
     }
 
     window,setTimeout(function(){
@@ -175,7 +182,7 @@ function takePicture(){
     window.setTimeout(function(){
         gettingPrediction.classList.add("hidden");
         gettingPrediction.innerHTML = "";
-        plotPerformanceCurve();
+        plotPerformanceCurve(isFalsePositive, isFalseNegative);
     }, 35000/speed);
 }
 
@@ -254,19 +261,52 @@ function simulateDefectScore(ok){
     // TODO plug on real AutoML Vision Predict API
 }
 
-function plotPerformanceCurve(){
+function plotPerformanceCurve(isFalsePositive, isFalseNegative){
     let total = falsepos + truepos + falseneg + trueneg;
     let correct = truepos + trueneg;
     let perf = correct/total;
+    let ctx = curve.getContext('2d');
+    //console.log("perf = " + perf);
     if(total>=2){
         let x = t/5;
-        let ctx = curve.getContext('2d');
-        ctx.beginPath();       
-        ctx.moveTo(x-8, 100-100*prevperf);    
+        ctx.beginPath();
+        ctx.strokeStyle = '#007';
+        ctx.lineWidth = 2;
+        ctx.moveTo(x-8, 100-100*prevperf);
         ctx.lineTo(x, 100-100*perf);
         ctx.stroke();
+
+        if(isFalsePositive){
+            ctx.fillStyle = '#F70';
+            ctx.rect(x-1, 100-100*perf-1, 3, 5);
+            ctx.fill();
+            let w = document.getElementById("warning-false-positive");
+            w.classList.remove("hidden");
+            window.setTimeout(function(){
+                w.classList.add("hidden");
+            }, 30000/speed);
+        }
+        if(isFalseNegative){
+            ctx.fillStyle = 'red';
+            ctx.rect(x-1, 100-100*perf-1, 3, 5);
+            ctx.fill();
+            let w = document.getElementById("warning-false-negative");
+            window.setTimeout(function(){
+                w.classList.remove("hidden");
+            }, 30000/speed);
+            window.setTimeout(function(){
+                w.classList.add("hidden");
+            }, 60000/speed);
+        }
+    }else{
+        // init
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#777";
+        ctx.fillText("100%", 520, 16);
+        ctx.fillText("Accuracy", 520, 60);
+        ctx.fillText("0%", 520, 100);
     }
     prevperf = perf;
 }
 
-fullScenario(40);
+fullScenario(nItems);
