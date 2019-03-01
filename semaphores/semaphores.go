@@ -26,12 +26,12 @@ func main() {
 }
 
 func lowTraffic() {
-	swimmers = 7
-	capacity = 4
+	swimmers = 2
+	capacity = 1
 	// arrivalPeriod = 10000;
 	// minSwimDuration = 3000;
 	// maxSwimDuration = 10000;
-	speed = 3
+	speed = 2
 }
 
 func highTraffic() {
@@ -46,6 +46,7 @@ func highTraffic() {
 func initJsSimulation() {
 	js.Global.Set("N", swimmers)
 	js.Global.Set("capacity", capacity)
+	js.Global.Set("speed", speed)
 	js.Global.Get("makeBasketCaps").Invoke(capacity)
 	wg = sync.WaitGroup{}
 	wg.Add(swimmers)
@@ -117,11 +118,11 @@ func lockers() {
 }
 
 func arrive() {
-	time.Sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
+	sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
 }
 
 func swim() {
-	time.Sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
+	sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
 }
 
 func leave() {
