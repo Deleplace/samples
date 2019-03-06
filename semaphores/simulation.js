@@ -9,9 +9,6 @@ const yOut = 400;
 // Simulation
 var N = 200; // Total number of swimmers
 var capacity = 20; // Max capacity of the pool
-var arrivalPeriod = 10000;
-var minSwimDuration = 3000;
-var maxSwimDuration = 10000;
 var speed = 1;
 var utilization = 0; // Current number of swimmers in the pool
 var caps;
@@ -40,7 +37,6 @@ function newSwimmer() {
 }
 
 function goSwim(s) {
-    utilization++;
     takeCap();
     s.setAttribute('src', 'resources/swimmer-red-cap.png');
     let newX = xPool + widthPool * Math.random();
@@ -60,7 +56,7 @@ function goSwim(s) {
         { transform: 'translateX(' + newX + 'px) translateY(' + newY + 'px)' }
     ],{ 
         duration: 1000 / speed,
-        easing: "ease-out",
+        easing: "ease-in-out",
         fill: "forwards"
     });
     s.posX = newX;
@@ -83,7 +79,6 @@ function getOut(s) {
 
     window.setTimeout(function() {
         putCap();
-        utilization--;
         s.setAttribute('src', 'resources/swimmer.png');
         s.animate([
             { transform: 'translateX(' + xEntry + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
@@ -118,68 +113,28 @@ function makeBasketCaps(C) {
     console.log("Basket filled up with " + C + " caps");
 }
 
-
 function takeCap() {
-    let i = capacity - utilization;
-    // console.log("N, capacity, utilization, i = " + N + ", " + capacity + ", " + utilization + ", " + i);
-    if(i<0){
-        console.warn("No cap to be taken");
-        return;
-    }
-    caps[i].style.display = "none";
+    utilization++;
+    updateCapDisplay();
 }
 
 function putCap() {
-    let i = capacity - utilization;
-    if(i<0){
-        console.warn("Silly index");
-        return;
+    utilization--;
+    updateCapDisplay();
+}
+
+function updateCapDisplay() {
+    console.log("utilization="+utilization);
+    let stackSize = capacity - utilization;
+    if(utilization>capacity){
+        console.warn("Yes there is a race condition between GopherJS controller and the JS view. But it's not the topic today.")
+        stackSize = 0;
     }
-    caps[i].style.display = "block";
+    for(let i=0;i<stackSize;i++)
+        caps[i].style.display = "block";
+    for(let i=stackSize;i<capacity;i++)
+        caps[i].style.display = "none";
 }
-
-function simulation(){
-    makeBasketCaps(capacity);
-    utilization = 0;
-
-    for(let i=0;i<N;i++) {
-        let t = Math.random() * arrivalPeriod / speed;
-        window.setTimeout(function() {
-            let s = newSwimmer();
-            let tIn = Math.random() * 5000 / speed;
-            window.setTimeout(function() {
-                goSwim(s);
-                let tOut = (minSwimDuration + (Math.random() * (maxSwimDuration-minSwimDuration))) / speed;
-                window.setTimeout(function() {
-                    getOut(s);
-                }, tOut)
-            }, tIn);
-        }, t);
-    }
-}
-
-function lowTraffic() {
-    N = 20;
-    capacity = 20;
-    arrivalPeriod = 10000;
-    minSwimDuration = 3000;
-    maxSwimDuration = 10000;
-    speed = 3;
-    simulation();
-}
-
-function highTraffic() {
-    N = 120;
-    capacity = 20;
-    arrivalPeriod = 10000;
-    minSwimDuration = 3000;
-    maxSwimDuration = 10000;
-    speed = 2;
-    simulation();
-}
-
-//lowTraffic();
-//  highTraffic();
 
 //
 // To be called by the Go code:
@@ -190,8 +145,10 @@ function arrive(i) {
 
 function swim(i, d) {
     let s = swimmers[i];
+    console.log("goSwim(" + i + ")");
     goSwim(s);
     window.setTimeout(function(){
+        console.log("getOut(" + i + ")");
         getOut(s);
-    }, d);
+    }, d/speed);
 }

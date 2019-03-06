@@ -12,12 +12,13 @@ import (
 var (
 	capacity = 20
 	swimmers = 20
-	speed    = 3
+	speed    = 1
 	wg       sync.WaitGroup
 )
 
 func main() {
-	lowTraffic()
+	// lowTraffic()
+	mediumTraffic()
 	// highTraffic()
 	initJsSimulation()
 
@@ -31,6 +32,12 @@ func lowTraffic() {
 	// arrivalPeriod = 10000;
 	// minSwimDuration = 3000;
 	// maxSwimDuration = 10000;
+	speed = 2
+}
+
+func mediumTraffic() {
+	swimmers = 20
+	capacity = 10
 	speed = 2
 }
 
@@ -66,10 +73,12 @@ func (s Swimmer) arrive() {
 }
 
 func (s Swimmer) swim() {
+	sleep(300 * time.Millisecond) // Delay where the cap is still in the basket
 	durationMs := 2000 + rand.Intn(6000)
+	fmt.Println(s, "will swim for", durationMs/speed)
 	js.Global.Get("swim").Invoke(s, durationMs)
-	backDuration := 3000 * time.Millisecond
-	sleep(time.Duration(durationMs)*time.Millisecond + backDuration)
+	backDurationMs := 3000
+	sleep(time.Duration(durationMs+backDurationMs) * time.Millisecond)
 }
 
 func swimcaps() {

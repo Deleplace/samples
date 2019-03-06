@@ -10,12 +10,12 @@ body {
 #pool {
     position: absolute;
     margin-left: 180px;
-    width: 70%;
+    width: 800px;
 }
 
 .swimmer {
     position: absolute;
-    height: 4rem;
+    height: 50px;
 }
 
 #basket {
