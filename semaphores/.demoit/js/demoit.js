@@ -19341,7 +19341,7 @@ $packages["math/rand"] = (function() {
 	return $pkg;
 })();
 $packages["."] = (function() {
-	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, Cap, arrayType, sliceType, capacity, swimmers, speed, wg, main, lowTraffic, initJsSimulation, sleep, swimcaps, leave;
+	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, Cap, arrayType, sliceType, capacity, swimmers, speed, wg, main, mediumTraffic, initJsSimulation, sleep, swimcaps, leave;
 	fmt = $packages["fmt"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	rand = $packages["math/rand"];
@@ -19359,20 +19359,21 @@ $packages["."] = (function() {
 	main = function() {
 		var $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		lowTraffic();
+		mediumTraffic();
 		initJsSimulation();
 		$r = swimcaps(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$s = -1; return;
 		/* */ } return; } if ($f === undefined) { $f = { $blk: main }; } $f.$s = $s; $f.$r = $r; return $f;
 	};
-	lowTraffic = function() {
-		swimmers = 7;
-		capacity = 4;
-		speed = 3;
+	mediumTraffic = function() {
+		swimmers = 20;
+		capacity = 10;
+		speed = 2;
 	};
 	initJsSimulation = function() {
 		$global.N = swimmers;
 		$global.capacity = capacity;
+		$global.speed = speed;
 		$global.makeBasketCaps(capacity);
 		sync.WaitGroup.copy(wg, new sync.WaitGroup.ptr(0, $chanNil, arrayType.zero()));
 		wg.Add(swimmers);
@@ -19398,16 +19399,19 @@ $packages["."] = (function() {
 	};
 	$ptrType(Swimmer).prototype.arrive = function() { return new Swimmer(this.$get()).arrive(); };
 	Swimmer.prototype.swim = function() {
-		var _r, backDuration, durationMs, s, x, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; backDuration = $f.backDuration; durationMs = $f.durationMs; s = $f.s; x = $f.x; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		var _q, _r, _r$1, backDurationMs, durationMs, s, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _q = $f._q; _r = $f._r; _r$1 = $f._r$1; backDurationMs = $f.backDurationMs; durationMs = $f.durationMs; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		s = this.$val;
-		_r = rand.Intn(6000); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		$r = sleep(new time.Duration(0, 300000000)); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		_r = rand.Intn(6000); /* */ $s = 2; case 2: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
 		durationMs = 2000 + _r >> 0;
+		_r$1 = fmt.Println(new sliceType([new Swimmer(s), new $String("will swim for"), new $Int((_q = durationMs / speed, (_q === _q && _q !== 1/0 && _q !== -1/0) ? _q >> 0 : $throwRuntimeError("integer divide by zero")))])); /* */ $s = 3; case 3: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
+		_r$1;
 		$global.swim(s, durationMs);
-		backDuration = new time.Duration(0, 3000000000);
-		$r = sleep((x = $mul64((new time.Duration(0, durationMs)), new time.Duration(0, 1000000)), new time.Duration(x.$high + backDuration.$high, x.$low + backDuration.$low))); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		backDurationMs = 3000;
+		$r = sleep($mul64((new time.Duration(0, (durationMs + backDurationMs >> 0))), new time.Duration(0, 1000000))); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$s = -1; return;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: Swimmer.prototype.swim }; } $f._r = _r; $f.backDuration = backDuration; $f.durationMs = durationMs; $f.s = s; $f.x = x; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: Swimmer.prototype.swim }; } $f._q = _q; $f._r = _r; $f._r$1 = _r$1; $f.backDurationMs = backDurationMs; $f.durationMs = durationMs; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	$ptrType(Swimmer).prototype.swim = function() { return new Swimmer(this.$get()).swim(); };
 	swimcaps = function() {
@@ -19472,7 +19476,7 @@ $packages["."] = (function() {
 		wg = new sync.WaitGroup.ptr(0, $chanNil, arrayType.zero());
 		capacity = 20;
 		swimmers = 20;
-		speed = 3;
+		speed = 1;
 		/* */ if ($pkg === $mainPkg) { $s = 6; continue; }
 		/* */ $s = 7; continue;
 		/* if ($pkg === $mainPkg) { */ case 6:
