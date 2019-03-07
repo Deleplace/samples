@@ -92,7 +92,10 @@ function getOut(s) {
         utilization--;
         putCap();
         takeGymBag();
-        s.setAttribute('src', '/images/swimmer.png');
+        if(metaphor=="lockers")
+            s.setAttribute('src', '/images/swimmer-with-bag.png');
+        else
+            s.setAttribute('src', '/images/swimmer.png');
         s.animate([
             { transform: 'translateX(' + xEntry + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
             { transform: 'translateX(' + -200 + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
