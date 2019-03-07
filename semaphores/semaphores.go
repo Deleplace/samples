@@ -12,18 +12,33 @@ import (
 var (
 	capacity = 20
 	swimmers = 20
-	speed    = 1
+	speed    = 1.0
+	launch   = make(chan func())
 	wg       sync.WaitGroup
 )
 
 func main() {
-	// lowTraffic()
-	mediumTraffic()
-	// highTraffic()
+	js.Global.Set("launchSimulation", launchSimulation)
+	simulation := <-launch
+	simulation()
+}
+
+// This will be exposed in JS, triggerable by the web page
+func launchSimulation(Capacity, Swimmers int, Speed float64, Metaphor string) {
+	capacity = Capacity
+	swimmers = Swimmers
+	speed = Speed
+
 	initJsSimulation()
 
-	swimcaps()
-	// lockers()
+	switch Metaphor {
+	case "swimcaps":
+		launch <- swimcaps
+	case "lockers":
+		launch <- lockers
+	default:
+		panic(fmt.Sprintf("Unexpected metaphor %q", Metaphor))
+	}
 }
 
 func lowTraffic() {
@@ -75,7 +90,7 @@ func (s Swimmer) arrive() {
 func (s Swimmer) swim() {
 	sleep(300 * time.Millisecond) // Delay where the cap is still in the basket
 	durationMs := 2000 + rand.Intn(6000)
-	fmt.Println(s, "will swim for", durationMs/speed)
+	fmt.Println(s, "will swim for", float64(durationMs)/speed)
 	js.Global.Get("swim").Invoke(s, durationMs)
 	backDurationMs := 3000
 	sleep(time.Duration(durationMs+backDurationMs) * time.Millisecond)

@@ -1,30 +1,129 @@
+/* Demoit */
+
 body {
-    background-color: #F7F7FF;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+    font-family: sans-serif;
+    color: rgb(51, 51, 51);
 }
 
-#scene {
-    margin-top: 200px;
-    background-color: white;
-}
-
-#pool {
+h1 {
+    margin-top: 0;
     position: absolute;
-    margin-left: 180px;
-    width: 800px;
+    top: 30px;
+    left: 0px;
+    text-align: left;
+    background: rgb(50, 109, 230);
+    width: calc(100% - 70px);
+    padding: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 0 8px 8px 0;
+    text-transform: none;
+    font-weight: normal;
+    color: white;
 }
 
-.swimmer {
-    position: absolute;
-    height: 50px;
+h2, h3 {
+    margin-top: 0;
 }
 
-#basket {
-    position: absolute;
-
+img {
+    margin: 0 auto;
+    max-height: 70%;
+    max-width: 70%;
 }
 
-.cap {
+.logos {
+    display: flex;
+    margin: 30px auto 0 auto;
+    width: 100%;
+}
+
+a, a:visited {
+    color: rgb(0,122,204);
+	text-decoration: none;
+}
+
+
+#top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    padding-top: 1.5em;
+    /*
+    */
+}
+
+.split {
+    display: flex;
+    height: calc(100% - 8em);
+}
+
+web-term, web-browser, source-code {
+    flex: 1;
+}
+
+web-term:first-child, web-browser:first-child, source-code:first-child {
+    margin-right: 5px;
+}
+
+web-term:last-child, web-browser:last-child, source-code:last-child {
+    margin-left: 5px;
+}
+
+web-term:only-child, web-browser:only-child, source-code:only-child {
+    margin: 0;
+}
+
+#nav {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+
+#nav a {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    border-radius: 24px;
+    line-height: 48px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(0,122,204);
+    color: white !important;
+    font-weight: bold;
+}
+
+#nav a:hover {
+    background-color: rgb(50, 109, 230);
+}
+
+#nav a.disabled {
+	pointer-events: none;
+	cursor: default;
+	visibility: hidden;
+}
+
+#progression {
+    height: 5px;
+    background-color: rgb(50, 109, 230);
     position: absolute;
-    z-index: 999;
-    height: 20px;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    display: block;
+    border-radius: 0 2px 2px 0;
+}
+
+em {
+    font-style: normal;
+    color: rgb(0,122,204);
 }

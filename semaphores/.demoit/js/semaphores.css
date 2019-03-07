@@ -1,0 +1,40 @@
+
+body {
+    background-color: #F7F7FF;
+}
+
+#scene {
+    /*
+    position: absolute;
+    height: 100vh;
+    */
+    /*
+    margin-top: 200px;
+    */
+    background-color: white;
+    height: 400px;
+    width: 1000px;
+    border: solid 4px #FF000044;
+}
+
+#pool {
+    position: absolute;
+    margin-left: 180px;
+    width: 800px;
+}
+
+.swimmer {
+    position: absolute;
+    height: 50px;
+}
+
+#basket {
+    position: absolute;
+
+}
+
+.cap {
+    position: absolute;
+    z-index: 999;
+    height: 20px;
+}

@@ -18,15 +18,15 @@ function newSwimmer() {
     let s = document.createElement('img');
     s.classList.add('swimmer');
     s.classList.add('back');
-    s.setAttribute('src', 'resources/swimmer.png');
+    s.setAttribute('src', '/images/swimmer.png');
     scene.appendChild(s);
 
-    s.posX = xEntry;
+    s.posX = xEntry - 50 + 70*Math.random();
     s.posY = 70 + Math.random() * heightPool;
 
     s.animate([
         { transform: 'translateX(' + 0 + 'px) translateY(' + s.posY + 'px)' },
-        { transform: 'translateX(' + xEntry + 'px) translateY(' + s.posY + 'px)' }
+        { transform: 'translateX(' + s.posX + 'px) translateY(' + s.posY + 'px)' }
     ],{ 
         duration: 1000 / speed,
         easing: "ease-out",
@@ -38,7 +38,8 @@ function newSwimmer() {
 
 function goSwim(s) {
     takeCap();
-    s.setAttribute('src', 'resources/swimmer-red-cap.png');
+    s.setAttribute('src', '/images/swimmer-red-cap.png');
+    let oldX = s.posX;
     let newX = xPool + widthPool * Math.random();
     let newY = s.posY;
     if(utilization > capacity) {
@@ -52,7 +53,7 @@ function goSwim(s) {
         newX = minX + (maxX - minX) * Math.random();
     }
     s.animate([
-        { transform: 'translateX(' + xEntry + 'px) translateY(' + s.posY + 'px)' },
+        { transform: 'translateX(' + oldX + 'px) translateY(' + s.posY + 'px)' },
         { transform: 'translateX(' + newX + 'px) translateY(' + newY + 'px)' }
     ],{ 
         duration: 1000 / speed,
@@ -79,7 +80,7 @@ function getOut(s) {
 
     window.setTimeout(function() {
         putCap();
-        s.setAttribute('src', 'resources/swimmer.png');
+        s.setAttribute('src', '/images/swimmer.png');
         s.animate([
             { transform: 'translateX(' + xEntry + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
             { transform: 'translateX(' + -200 + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
@@ -98,11 +99,11 @@ function makeBasketCaps(C) {
     }
     caps = [];
     const baseX = 130;
-    const baseY = 550;
+    const baseY = 350;
     for(let i=0;i<C;i++){
         let cap = document.createElement("img");
         cap.classList.add("cap");
-        cap.setAttribute("src", "resources/cap.png");
+        cap.setAttribute("src", "/images/cap.png");
         let x = 18 * Math.floor(i/5);
         let y = 15 * (i % 5);
         cap.style.left = (baseX + x) + "px";
