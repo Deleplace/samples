@@ -19760,7 +19760,7 @@ $packages["math/rand"] = (function() {
 	return $pkg;
 })();
 $packages["."] = (function() {
-	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, Cap, GymBag, arrayType, funcType, funcType$1, sliceType, capacity, swimmers, speed, launch, wg, main, launchSimulation, initJsSimulation, sleep, swimcaps, lockers, arrive, swim, leave;
+	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, Cap, GymBag, arrayType, funcType, funcType$1, sliceType, capacity, swimmers, speed, metaphor, launch, wg, main, launchSimulation, initJsSimulation, sleep, swimcaps, lockers, leave;
 	fmt = $packages["fmt"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	rand = $packages["math/rand"];
@@ -19799,6 +19799,7 @@ $packages["."] = (function() {
 		capacity = Capacity;
 		swimmers = Swimmers;
 		speed = Speed;
+		metaphor = Metaphor;
 		initJsSimulation();
 			_1 = Metaphor;
 			/* */ if (_1 === ("swimcaps")) { $s = 2; continue; }
@@ -19822,7 +19823,13 @@ $packages["."] = (function() {
 		$global.N = swimmers;
 		$global.capacity = capacity;
 		$global.speed = speed;
-		$global.makeBasketCaps(capacity);
+		$global.metaphor = $externalize(metaphor, $String);
+		if (metaphor === "swimcaps") {
+			$global.makeBasketCaps(capacity);
+		}
+		if (metaphor === "lockers") {
+			$global.makeLockerBags(capacity);
+		}
 		sync.WaitGroup.copy(wg, new sync.WaitGroup.ptr(0, $chanNil, arrayType.zero()));
 		wg.Add(swimmers);
 	};
@@ -19903,54 +19910,36 @@ $packages["."] = (function() {
 		/* */ } return; } if ($f === undefined) { $f = { $blk: swimcaps }; } $f._r = _r; $f.caps = caps; $f.i = i; $f.i$1 = i$1; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	lockers = function() {
-		var i, i$1, lockers$1, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; i = $f.i; i$1 = $f.i$1; lockers$1 = $f.lockers$1; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		var i, lockers$1, s, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; i = $f.i; lockers$1 = $f.lockers$1; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		lockers$1 = [lockers$1];
 		lockers$1[0] = new $Chan(GymBag, capacity);
 		i = 0;
 		/* while (true) { */ case 1:
 			/* if (!(i < swimmers)) { break; } */ if(!(i < swimmers)) { $s = 2; continue; }
-			i$1 = [i$1];
-			i$1[0] = i;
-			$go((function(i$1, lockers$1) { return function $b() {
-				var _r, _r$1, _r$2, _r$3, $s, $r;
-				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; _r$3 = $f._r$3; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-				$r = arrive(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-				_r = fmt.Println(new sliceType([new $Int(i$1[0]), new $String("\tarrives")])); /* */ $s = 2; case 2: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+			s = [s];
+			s[0] = ((i >> 0));
+			$go((function(lockers$1, s) { return function $b() {
+				var _r, _r$1, _r$2, $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				$r = new Swimmer(s[0]).arrive(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				$r = $send(lockers$1[0], $clone(new GymBag.ptr(), GymBag)); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				_r = fmt.Println(new sliceType([new Swimmer(s[0]), new $String("gave a gym bag")])); /* */ $s = 3; case 3: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
 				_r;
-				$r = $send(lockers$1[0], $clone(new GymBag.ptr(), GymBag)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-				_r$1 = fmt.Println(new sliceType([new $Int(i$1[0]), new $String("\tgets in")])); /* */ $s = 4; case 4: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
-				_r$1;
-				$r = swim(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-				_r$2 = fmt.Println(new sliceType([new $Int(i$1[0]), new $String("\tgets out")])); /* */ $s = 6; case 6: if($c) { $c = false; _r$2 = _r$2.$blk(); } if (_r$2 && _r$2.$blk !== undefined) { break s; }
+				$r = new Swimmer(s[0]).swim(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				_r$1 = $recv(lockers$1[0]); /* */ $s = 5; case 5: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
+				_r$1[0];
+				_r$2 = fmt.Println(new sliceType([new Swimmer(s[0]), new $String("took a gym bag")])); /* */ $s = 6; case 6: if($c) { $c = false; _r$2 = _r$2.$blk(); } if (_r$2 && _r$2.$blk !== undefined) { break s; }
 				_r$2;
-				_r$3 = $recv(lockers$1[0]); /* */ $s = 7; case 7: if($c) { $c = false; _r$3 = _r$3.$blk(); } if (_r$3 && _r$3.$blk !== undefined) { break s; }
-				_r$3[0];
-				wg.Done();
+				$r = leave(); /* */ $s = 7; case 7: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				$s = -1; return;
-				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f._r$3 = _r$3; $f.$s = $s; $f.$r = $r; return $f;
-			}; })(i$1, lockers$1), []);
+				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f.$s = $s; $f.$r = $r; return $f;
+			}; })(lockers$1, s), []);
 			i = i + (1) >> 0;
 		/* } */ $s = 1; continue; case 2:
 		$r = wg.Wait(); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$s = -1; return;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: lockers }; } $f.i = i; $f.i$1 = i$1; $f.lockers$1 = lockers$1; $f.$s = $s; $f.$r = $r; return $f;
-	};
-	arrive = function() {
-		var _r, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		_r = rand.Intn(400); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-		$r = sleep($mul64((new time.Duration(0, _r)), new time.Duration(0, 1000000))); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		$s = -1; return;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: arrive }; } $f._r = _r; $f.$s = $s; $f.$r = $r; return $f;
-	};
-	swim = function() {
-		var _r, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		_r = rand.Intn(400); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-		$r = sleep($mul64((new time.Duration(0, _r)), new time.Duration(0, 1000000))); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		$s = -1; return;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: swim }; } $f._r = _r; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: lockers }; } $f.i = i; $f.lockers$1 = lockers$1; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	leave = function() {
 		var _r, $s, $r;
@@ -19976,6 +19965,7 @@ $packages["."] = (function() {
 		capacity = 20;
 		swimmers = 20;
 		speed = 1;
+		metaphor = "swimcaps";
 		launch = new $Chan(funcType, 0);
 		/* */ if ($pkg === $mainPkg) { $s = 6; continue; }
 		/* */ $s = 7; continue;

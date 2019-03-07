@@ -25,16 +25,40 @@ body {
 
 .swimmer {
     position: absolute;
+    /*
     height: 50px;
+    */
+    width: 75px;
 }
 
 #basket {
     position: absolute;
-
+    margin-top: 345px;
+    margin-left: 100px;
+    width: 100px;
+    z-index: 100;
 }
 
 .cap {
     position: absolute;
-    z-index: 999;
+    z-index: 50;
     height: 20px;
+}
+
+.lockers {
+    position: absolute;
+    margin-top: 315px;
+    margin-left: 40px;
+    width: 250px;
+    z-index: 100;
+}
+
+.lockers.bg {
+    z-index: 0;
+}
+
+.gymbag {
+    position: absolute;
+    z-index: 50;
+    width: 48px;
 }

@@ -12,13 +12,18 @@ var capacity = 20; // Max capacity of the pool
 var speed = 1;
 var utilization = 0; // Current number of swimmers in the pool
 var caps;
+var bags;
 var swimmers = [];
+var metaphor; // "swimcaps" or "lockers"
 
 function newSwimmer() {
     let s = document.createElement('img');
     s.classList.add('swimmer');
     s.classList.add('back');
-    s.setAttribute('src', '/images/swimmer.png');
+    if(metaphor=="lockers")
+        s.setAttribute('src', '/images/swimmer-with-bag.png');
+    else
+        s.setAttribute('src', '/images/swimmer.png');
     scene.appendChild(s);
 
     s.posX = xEntry - 50 + 70*Math.random();
@@ -37,8 +42,13 @@ function newSwimmer() {
 }
 
 function goSwim(s) {
+    utilization++;
+    putGymBag();
     takeCap();
-    s.setAttribute('src', '/images/swimmer-red-cap.png');
+    if(metaphor=="swimcaps")
+        s.setAttribute('src', '/images/swimmer-red-cap.png');
+    else
+        s.setAttribute('src', '/images/swimmer.png');
     let oldX = s.posX;
     let newX = xPool + widthPool * Math.random();
     let newY = s.posY;
@@ -79,7 +89,9 @@ function getOut(s) {
     s.posX = xEntry;
 
     window.setTimeout(function() {
+        utilization--;
         putCap();
+        takeGymBag();
         s.setAttribute('src', '/images/swimmer.png');
         s.animate([
             { transform: 'translateX(' + xEntry + 'px) translateY(' + yOut + 'px) scaleX(-1)' },
@@ -114,17 +126,47 @@ function makeBasketCaps(C) {
     console.log("Basket filled up with " + C + " caps");
 }
 
+function makeLockerBags(C) {
+    if(bags){
+        for(let i=0;i<caps.length;i++)
+            document.removeChild(caps[i]);
+    }
+    bags = [];
+    const baseX = 50;
+    const baseY = 348;
+    for(let i=0;i<C;i++){
+        let bag = document.createElement("img");
+        bag.classList.add("gymbag");
+        bag.setAttribute("src", "/images/gymbag.png");
+        bag.style.display = "none";
+        let x = 49 * i;
+        bag.style.left = (baseX + x) + "px";
+        bag.style.top = (baseY) + "px";
+        scene.appendChild(bag);
+        bags.push(bag);
+    }
+    console.log("Lockers ready for " + C + " bags");
+}
+
 function takeCap() {
-    utilization++;
     updateCapDisplay();
 }
 
 function putCap() {
-    utilization--;
     updateCapDisplay();
 }
 
+function takeGymBag() {
+    updateLockersDisplay();
+}
+
+function putGymBag() {
+    updateLockersDisplay();
+}
+
 function updateCapDisplay() {
+    if(metaphor != "swimcaps")
+        return;
     console.log("utilization="+utilization);
     let stackSize = capacity - utilization;
     if(utilization>capacity){
@@ -135,6 +177,25 @@ function updateCapDisplay() {
         caps[i].style.display = "block";
     for(let i=stackSize;i<capacity;i++)
         caps[i].style.display = "none";
+}
+
+function updateLockersDisplay() {
+    if(metaphor != "lockers")
+        return;
+    console.log("utilization="+utilization);
+    let stackSize = utilization;
+    if(utilization<0){
+        console.warn("Yes there is a race condition between GopherJS controller and the JS view. But it's not the topic today.")
+        stackSize = 0;
+    }
+    if(utilization>capacity){
+        console.warn("Yes there is a race condition between GopherJS controller and the JS view. But it's not the topic today.")
+        stackSize = capacity-1;
+    }
+    for(let i=0;i<stackSize;i++)
+        bags[i].style.display = "block";
+    for(let i=stackSize;i<capacity;i++)
+        bags[i].style.display = "none";
 }
 
 //

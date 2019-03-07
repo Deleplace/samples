@@ -13,6 +13,7 @@ var (
 	capacity = 20
 	swimmers = 20
 	speed    = 1.0
+	metaphor = "swimcaps"
 	launch   = make(chan func())
 	wg       sync.WaitGroup
 )
@@ -28,6 +29,7 @@ func launchSimulation(Capacity, Swimmers int, Speed float64, Metaphor string) {
 	capacity = Capacity
 	swimmers = Swimmers
 	speed = Speed
+	metaphor = Metaphor
 
 	initJsSimulation()
 
@@ -69,7 +71,13 @@ func initJsSimulation() {
 	js.Global.Set("N", swimmers)
 	js.Global.Set("capacity", capacity)
 	js.Global.Set("speed", speed)
-	js.Global.Get("makeBasketCaps").Invoke(capacity)
+	js.Global.Set("metaphor", metaphor)
+	if metaphor == "swimcaps" {
+		js.Global.Get("makeBasketCaps").Invoke(capacity)
+	}
+	if metaphor == "lockers" {
+		js.Global.Get("makeLockerBags").Invoke(capacity)
+	}
 	wg = sync.WaitGroup{}
 	wg.Add(swimmers)
 }
@@ -125,16 +133,15 @@ func lockers() {
 	lockers := make(chan GymBag, capacity)
 
 	for i := 0; i < swimmers; i++ {
-		i := i
+		s := Swimmer(i)
 		go func() {
-			arrive()
-			fmt.Println(i, "\tarrives")
+			s.arrive()
 			lockers <- GymBag{}
-			fmt.Println(i, "\tgets in")
-			swim()
-			fmt.Println(i, "\tgets out")
+			fmt.Println(s, "gave a gym bag")
+			s.swim()
 			<-lockers
-			wg.Done()
+			fmt.Println(s, "took a gym bag")
+			leave()
 		}()
 	}
 
