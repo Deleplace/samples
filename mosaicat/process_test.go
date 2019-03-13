@@ -8,9 +8,15 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/nfnt/resize"
 )
 
 func BenchmarkProcess(b *testing.B) {
+	*catwidth, *ncats = 32, 20
+	w, h = *catwidth, *catwidth
+	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+
 	for i := 0; i < b.N; i++ {
 		inputFilename := "testdata/monalisa.jpg"
 		outputFilename := "out.png"
@@ -36,6 +42,9 @@ func BenchmarkProcess(b *testing.B) {
 }
 
 func BenchmarkProcessInMemory(b *testing.B) {
+	*catwidth, *ncats = 32, 20
+	w, h = *catwidth, *catwidth
+	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
 	inputFilename := "testdata/monalisa.jpg"
 
 	indata, err := ioutil.ReadFile(inputFilename)
@@ -43,9 +52,9 @@ func BenchmarkProcessInMemory(b *testing.B) {
 		b.Fatal("Couldn't open", inputFilename, "for reading:", err)
 		return
 	}
-	// outmem := make([]byte, 20*1024*1024)
-	outmem := make([]byte, 20*1024)
+	outmem := make([]byte, 20*1024*1024)
 
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		in := bytes.NewBuffer(indata)
 		out := bytes.NewBuffer(outmem)
