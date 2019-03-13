@@ -134,11 +134,12 @@ func colorizeCat(c color.Color) image.Image {
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			total++
-			if similar(cc.At(x, y), blue) {
+			current := cc.At(x, y)
+			if similar(current, blue) {
 				bluecount++
 				cc.Set(x, y, lo)
 			}
-			if isTransparent(cc.At(x, y)) {
+			if isTransparent(current) {
 				backcount++
 				cc.Set(x, y, hi)
 			}
