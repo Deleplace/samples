@@ -38,19 +38,19 @@ func main() {
 	in, err := os.Open(inputFilename)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Couldn't open", inputFilename, "for reading:", err)
-		return
+		os.Exit(1)
 	}
 
 	out, err := os.OpenFile(outputFilename, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Couldn't open", outputFilename, "for writing:", err)
-		return
+		os.Exit(2)
 	}
 
 	err = process(in, out)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Failed to process", inputFilename, ":", err)
-		return
+		os.Exit(3)
 	}
 
 	log.Println("Written", outputFilename)
@@ -63,14 +63,21 @@ func process(in io.Reader, out io.Writer) error {
 	}
 	log.Println("Decoded a", format)
 
+	if srcW := src.Bounds().Max.X; srcW < *ncats {
+		return fmt.Errorf("Can't have input width (%d) less than ncats (%d)", srcW, *ncats)
+	}
+
 	W, H := src.Bounds().Max.X, src.Bounds().Max.Y
-	dst := image.NewRGBA(image.Rect(0, 0, W, H))
 
-	draw.Draw(dst, dst.Bounds(), src, image.ZP, draw.Src)
+	WW := *ncats * *catwidth
+	HH := (WW * H) / W
+	dst := image.NewRGBA(image.Rect(0, 0, WW, HH))
 
-	for x := 0; x < W; x += w {
-		for y := 0; y < H; y += h {
-			c := src.At(x+w/2, y+h/2)
+	// draw.Draw(dst, dst.Bounds(), src, image.ZP, draw.Src)
+
+	for x := 0; x < WW; x += w {
+		for y := 0; y < HH; y += h {
+			c := src.At((x*W+w/2)/WW, (y*H+h/2)/HH)
 			colorcat := colorizeCat(c)
 			// log.Println("Drawing at", x, y)
 			dstR := image.Rect(x, y, x+w, y+h)
