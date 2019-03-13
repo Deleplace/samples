@@ -66,3 +66,29 @@ func BenchmarkProcessInMemory(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkProcessLargeInMemory(b *testing.B) {
+	*catwidth, *ncats = 128, 50
+	w, h = *catwidth, *catwidth
+	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+	inputFilename := "testdata/monalisa.jpg"
+
+	indata, err := ioutil.ReadFile(inputFilename)
+	if err != nil {
+		b.Fatal("Couldn't open", inputFilename, "for reading:", err)
+		return
+	}
+	outmem := make([]byte, 20*1024*1024)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		in := bytes.NewBuffer(indata)
+		out := bytes.NewBuffer(outmem)
+
+		err = process(in, out)
+		if err != nil {
+			b.Fatal("Failed to process", inputFilename, ":", err)
+			return
+		}
+	}
+}
