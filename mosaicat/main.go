@@ -134,12 +134,12 @@ func colorizeCat(c color.Color) image.Image {
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			total++
-			current := cc.At(x, y)
-			if similar(current, blue) {
+			current := cc.RGBAAt(x, y)
+			if similarRGBA(current, blue) {
 				bluecount++
 				cc.Set(x, y, lo)
 			}
-			if isTransparent(current) {
+			if isTransparentRGBA(current) {
 				backcount++
 				cc.Set(x, y, hi)
 			}
@@ -164,6 +164,18 @@ func similar(c1, c2 color.Color) bool {
 func isTransparent(c color.Color) bool {
 	_, _, _, a := c.RGBA()
 	return a < 1000
+}
+
+func similarRGBA(c1, c2 color.RGBA) bool {
+	dr := int(c1.R) - int(c2.R)
+	dg := int(c1.G) - int(c2.G)
+	db := int(c1.B) - int(c2.B)
+	da := int(c1.A) - int(c2.A)
+	return dr*dr+dg*dg+db*db+da*da < 30500
+}
+
+func isTransparentRGBA(c color.RGBA) bool {
+	return c.A <= 4
 }
 
 // Produce 1 bright color + 1 dark color
