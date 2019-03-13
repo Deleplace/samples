@@ -18,17 +18,22 @@ import (
 )
 
 var (
-	inputFilename = flag.String("aaa", "", "it's the thing")
-	count         = flag.Int("count", 0, "it's the number")
+	catwidth = flag.Int("catwidth", 32, "size of the side of a cat square")
+	ncats    = flag.Int("ncats", 20, "number of cats per line")
 )
 
 func main() {
-	if len(os.Args) != 3 {
+	flag.Parse()
+	w, h = *catwidth, *catwidth
+	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+
+	if flag.NArg() != 2 {
+		log.Println(flag.NArg())
 		usage()
 	}
 
-	inputFilename := os.Args[1]
-	outputFilename := os.Args[2]
+	inputFilename := flag.Arg(0)
+	outputFilename := flag.Arg(1)
 
 	in, err := os.Open(inputFilename)
 	if err != nil {
@@ -195,7 +200,7 @@ func colorPair(c color.Color) (hi, lo color.Color) {
 }
 
 var cat, smallcat image.Image
-var w, h = 24, 24
+var w, h int
 
 func init() {
 	// f, err := os.Open("cat.png")
@@ -207,7 +212,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
 }
 
 func usage() {
