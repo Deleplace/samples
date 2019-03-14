@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"image/gif"
 	_ "image/gif"
 	_ "image/jpeg"
 	"image/png"
@@ -114,12 +115,6 @@ func avg(img image.Image, rect image.Rectangle) color.Color {
 func colorizeCat(c color.Color) image.Image {
 	// Replace 1 pixel at a time
 	cc := image.NewRGBA(image.Rect(0, 0, w, h))
-	back := color.RGBA{
-		R: 255,
-		G: 255,
-		B: 255,
-		A: 255,
-	}
 	blue := color.RGBA{
 		R: 109,
 		G: 159,
@@ -147,8 +142,38 @@ func colorizeCat(c color.Color) image.Image {
 	}
 	// log.Println("Blue area =", bluecount, "/", total)
 	// log.Println("Back area =", backcount, "/", total)
-	_ = back
 	return cc
+}
+
+func colorizeCatPaletted(c color.Color) *image.Paletted {
+	var p *image.Paletted
+	blue := color.RGBA{
+		R: 109,
+		G: 159,
+		B: 208,
+		A: 255,
+	}
+
+	hi, lo := colorPair(c)
+
+	altPalette := make(color.Palette, len(p.Palette))
+	copy(altPalette, p.Palette)
+	for i, x := range altPalette {
+		if similar(x, blue) {
+			altPalette[i] = lo
+		}
+		if isTransparent(x) {
+			altPalette[i] = hi
+		}
+	}
+
+	pp := image.Paletted{
+		Pix:     p.Pix,
+		Stride:  p.Stride,
+		Rect:    p.Rect,
+		Palette: altPalette,
+	}
+	return &pp
 }
 
 func similar(c1, c2 color.Color) bool {
@@ -223,15 +248,27 @@ var cat, smallcat image.Image
 var w, h int
 
 func init() {
+	// PNG cat
 	// f, err := os.Open("cat.png")
-	f, err := os.Open("cat_transp.png")
+	// f, err := os.Open("cat_transp.png")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// cat, _, err = image.Decode(f)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// GIF cat
+	f, err := os.Open("cat_transp.gif")
 	if err != nil {
 		panic(err)
 	}
-	cat, _, err = image.Decode(f)
+	g, err := gif.DecodeAll(f)
 	if err != nil {
 		panic(err)
 	}
+	cat = g.Image[0]
 }
 
 func usage() {
