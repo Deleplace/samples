@@ -23,6 +23,7 @@ body {
 
 #pool {
     position: absolute;
+    margin-top: 100px;
     margin-left: 180px;
     width: 800px;
 }
@@ -37,7 +38,7 @@ body {
 
 #basket {
     position: absolute;
-    margin-top: 345px;
+    margin-top: 445px;
     margin-left: 100px;
     width: 100px;
     z-index: 100;
@@ -51,7 +52,7 @@ body {
 
 .lockers {
     position: absolute;
-    margin-top: 315px;
+    margin-top: 415px;
     margin-left: 40px;
     width: 250px;
     z-index: 100;

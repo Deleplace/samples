@@ -2,10 +2,10 @@ let scene = document.getElementById("scene");
 let safetyIndicator = document.getElementById("safety-indicator");
 
 const xEntry = 120;
-const xPool = 350;
-const widthPool = 500;
+const xPool = 280;
+const widthPool = 560;
 const heightPool = 200;
-const yOut = 400;
+const yOut = 500;
 
 // Simulation
 var N = 200; // Total number of swimmers
@@ -28,7 +28,7 @@ function newSwimmer() {
     scene.appendChild(s);
 
     s.posX = xEntry - 50 + 70*Math.random();
-    s.posY = 70 + Math.random() * heightPool;
+    s.posY = 170 + Math.random() * heightPool;
 
     s.animate([
         { transform: 'translateX(' + 0 + 'px) translateY(' + s.posY + 'px)' },
@@ -121,7 +121,7 @@ function makeBasketCaps(C) {
     }
     caps = [];
     const baseX = 130;
-    const baseY = 350;
+    const baseY = 450;
     for(let i=0;i<C;i++){
         let cap = document.createElement("img");
         cap.classList.add("cap");
@@ -143,7 +143,7 @@ function makeGymbagsShelf(C) {
     }
     bags = [];
     const baseX = 50;
-    const baseY = 348;
+    const baseY = 448;
     for(let i=0;i<C;i++){
         let bag = document.createElement("img");
         bag.classList.add("gymbag");
