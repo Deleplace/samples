@@ -14,13 +14,13 @@ var utilization = 0; // Current number of swimmers in the pool
 var caps;
 var bags;
 var swimmers = [];
-var metaphor; // "swimcaps" or "lockers"
+var metaphor; // "swimcaps" or "gymbags" or "nosync"
 
 function newSwimmer() {
     let s = document.createElement('img');
     s.classList.add('swimmer');
     s.classList.add('back');
-    if(metaphor=="lockers")
+    if(metaphor=="gymbags")
         s.setAttribute('src', '/images/swimmer-with-bag.png');
     else
         s.setAttribute('src', '/images/swimmer.png');
@@ -92,7 +92,7 @@ function getOut(s) {
         utilization--;
         putCap();
         takeGymBag();
-        if(metaphor=="lockers")
+        if(metaphor=="gymbags")
             s.setAttribute('src', '/images/swimmer-with-bag.png');
         else
             s.setAttribute('src', '/images/swimmer.png');
@@ -129,7 +129,7 @@ function makeBasketCaps(C) {
     console.log("Basket filled up with " + C + " caps");
 }
 
-function makeLockerBags(C) {
+function makeGymbagsShelf(C) {
     if(bags){
         for(let i=0;i<caps.length;i++)
             document.removeChild(caps[i]);
@@ -148,7 +148,7 @@ function makeLockerBags(C) {
         scene.appendChild(bag);
         bags.push(bag);
     }
-    console.log("Lockers ready for " + C + " bags");
+    console.log("Shelf ready for " + C + " gym bags");
 }
 
 function takeCap() {
@@ -160,11 +160,11 @@ function putCap() {
 }
 
 function takeGymBag() {
-    updateLockersDisplay();
+    updateGymbagsDisplay();
 }
 
 function putGymBag() {
-    updateLockersDisplay();
+    updateGymbagsDisplay();
 }
 
 function updateCapDisplay() {
@@ -182,8 +182,8 @@ function updateCapDisplay() {
         caps[i].style.display = "none";
 }
 
-function updateLockersDisplay() {
-    if(metaphor != "lockers")
+function updateGymbagsDisplay() {
+    if(metaphor != "gymbags")
         return;
     console.log("utilization="+utilization);
     let stackSize = utilization;

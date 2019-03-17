@@ -36,8 +36,10 @@ func launchSimulation(Capacity, Swimmers int, Speed float64, Metaphor string) {
 	switch Metaphor {
 	case "swimcaps":
 		launch <- swimcaps
-	case "lockers":
-		launch <- lockers
+	case "gymbags":
+		launch <- gymbags
+	case "nosync":
+		launch <- nosync
 	default:
 		panic(fmt.Sprintf("Unexpected metaphor %q", Metaphor))
 	}
@@ -75,8 +77,8 @@ func initJsSimulation() {
 	if metaphor == "swimcaps" {
 		js.Global.Get("makeBasketCaps").Invoke(capacity)
 	}
-	if metaphor == "lockers" {
-		js.Global.Get("makeLockerBags").Invoke(capacity)
+	if metaphor == "gymbags" {
+		js.Global.Get("makeGymbagsShelf").Invoke(capacity)
 	}
 	wg = sync.WaitGroup{}
 	wg.Add(swimmers)
@@ -91,6 +93,7 @@ type Swimmer int
 func (s Swimmer) arrive() {
 	arrivalDateMs := rand.Intn(15000)
 	sleep(time.Duration(arrivalDateMs) * time.Millisecond)
+	fmt.Println(s, "arrives")
 	js.Global.Get("arrive").Invoke(s)
 	sleep(time.Second)
 }
@@ -102,6 +105,20 @@ func (s Swimmer) swim() {
 	js.Global.Get("swim").Invoke(s, durationMs)
 	backDurationMs := 3000
 	sleep(time.Duration(durationMs+backDurationMs) * time.Millisecond)
+}
+
+func nosync() {
+	for i := 0; i < swimmers; i++ {
+		s := Swimmer(i)
+		go func() {
+			s.arrive()
+			s.swim()
+			leave()
+		}()
+	}
+
+	wg.Wait()
+	fmt.Println("All swimmers have left!")
 }
 
 func swimcaps() {
@@ -128,18 +145,18 @@ func swimcaps() {
 	fmt.Println("All swimmers have left!")
 }
 
-func lockers() {
+func gymbags() {
 	type GymBag struct{}
-	lockers := make(chan GymBag, capacity)
+	shelf := make(chan GymBag, capacity)
 
 	for i := 0; i < swimmers; i++ {
 		s := Swimmer(i)
 		go func() {
 			s.arrive()
-			lockers <- GymBag{}
+			shelf <- GymBag{}
 			fmt.Println(s, "gave a gym bag")
 			s.swim()
-			<-lockers
+			<-shelf
 			fmt.Println(s, "took a gym bag")
 			leave()
 		}()
