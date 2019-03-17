@@ -1,6 +1,8 @@
 
 body {
+    /*
     background-color: #F7F7FF;
+    */
 }
 
 #scene {
@@ -14,7 +16,9 @@ body {
     background-color: white;
     height: 400px;
     width: 1000px;
+    /*
     border: solid 4px #FF000044;
+    */
 }
 
 #pool {
@@ -61,4 +65,23 @@ body {
     position: absolute;
     z-index: 50;
     width: 48px;
+}
+
+.safety {
+    position: absolute;
+    margin-left: 980px;
+    width: 120px;
+    text-align: center;
+    border: 4px #888 solid;
+    border-radius: 12px;
+    background-color: #F7F7F7;
+    padding: 8px;
+}
+
+.safety h2 {
+    margin-top: 0.2rem;
+}
+
+#safety-indicator {
+    height: 40px;
 }

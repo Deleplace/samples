@@ -1,4 +1,5 @@
 let scene = document.getElementById("scene");
+let safetyIndicator = document.getElementById("safety-indicator");
 
 const xEntry = 120;
 const xPool = 350;
@@ -43,6 +44,7 @@ function newSwimmer() {
 
 function goSwim(s) {
     utilization++;
+    updateSafetyIndicator();
     putGymBag();
     takeCap();
     if(metaphor=="swimcaps")
@@ -75,6 +77,10 @@ function goSwim(s) {
 }
 
 function getOut(s) {
+    // Dramatic hack: nobody gets out anymore when congestion is high
+    if (utilization > 2*capacity)
+        return;
+
     s.classList.add('back');
     let d = 3000 / speed;
     let anim = s.animate([
@@ -90,6 +96,7 @@ function getOut(s) {
 
     window.setTimeout(function() {
         utilization--;
+        updateSafetyIndicator();
         putCap();
         takeGymBag();
         if(metaphor=="gymbags")
@@ -199,6 +206,23 @@ function updateGymbagsDisplay() {
         bags[i].style.display = "block";
     for(let i=stackSize;i<capacity;i++)
         bags[i].style.display = "none";
+}
+
+function updateSafetyIndicator() {
+    if(!safetyIndicator)
+        return;
+
+    if(utilization>capacity) {
+        safetyIndicator.src = "/images/safety-red.png";
+        return;
+    }
+    /*
+    if(utilization>=(9*capacity/10)) {
+        safetyIndicator.src = "/images/safety-orange.png";
+        return;
+    }
+    */
+    safetyIndicator.src = "/images/safety-green.png";
 }
 
 //
