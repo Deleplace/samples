@@ -28,10 +28,12 @@ function prev() {
 document.addEventListener("keydown", event => {
     switch (event.key) {
         case "ArrowRight":
+        case "PageDown":
         case " ":
             next();
             break;
         case "ArrowLeft":
+        case "PageUp":
             prev();
             break;
         default:
