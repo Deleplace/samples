@@ -133,3 +133,43 @@ em {
 #nav a {
     visibility: hidden;
 }
+
+h2 {
+    font-size: 6rem;
+    margin-left: 10rem;
+    margin-right: 10rem;
+}
+
+.takeaways li {
+    list-style-type: none;
+    font-size: 4rem;
+    padding-bottom: 3rem;
+}
+
+.thanks {
+    border: 1px solid #CCC;
+    border-radius: 20px;
+    min-width: 10rem;
+    width: 40%;
+    text-align: left;
+    padding: 1rem;
+}
+
+.thanks h3 {
+    margin-bottom: 1rem;
+}
+
+.thanks ul {
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.thanks li {
+    list-style-type: none;
+    margin-bottom: 1rem;
+}
+
+.thanks .fade {
+    color: #777;
+}
