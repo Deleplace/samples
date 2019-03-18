@@ -19760,14 +19760,14 @@ $packages["math/rand"] = (function() {
 	return $pkg;
 })();
 $packages["."] = (function() {
-	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, Cap, GymBag, arrayType, funcType, funcType$1, sliceType, capacity, swimmers, speed, metaphor, launch, wg, main, launchSimulation, initJsSimulation, sleep, nosync, swimcaps, gymbags, leave;
+	var $pkg = {}, $init, fmt, js, rand, sync, time, Swimmer, SwimCap, GymBag, arrayType, funcType, funcType$1, sliceType, capacity, swimmers, speed, metaphor, launch, wg, main, launchSimulation, initJsSimulation, sleep, nosync, swimcaps, gymbags, leave;
 	fmt = $packages["fmt"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	rand = $packages["math/rand"];
 	sync = $packages["sync"];
 	time = $packages["time"];
 	Swimmer = $pkg.Swimmer = $newType(4, $kindInt, "main.Swimmer", true, ".", true, null);
-	Cap = $newType(0, $kindStruct, "main.Cap", true, ".", true, function() {
+	SwimCap = $newType(0, $kindStruct, "main.SwimCap", true, ".", true, function() {
 		this.$val = this;
 		if (arguments.length === 0) {
 			return;
@@ -19904,11 +19904,11 @@ $packages["."] = (function() {
 		var _r, caps, i, i$1, s, $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; caps = $f.caps; i = $f.i; i$1 = $f.i$1; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		caps = [caps];
-		caps[0] = new $Chan(Cap, capacity);
+		caps[0] = new $Chan(SwimCap, capacity);
 		i = 0;
 		/* while (true) { */ case 1:
 			/* if (!(i < capacity)) { break; } */ if(!(i < capacity)) { $s = 2; continue; }
-			$r = $send(caps[0], $clone(new Cap.ptr(), Cap)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			$r = $send(caps[0], $clone(new SwimCap.ptr(), SwimCap)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 			i = i + (1) >> 0;
 		/* } */ $s = 1; continue; case 2:
 		i$1 = 0;
@@ -19917,20 +19917,20 @@ $packages["."] = (function() {
 			s = [s];
 			s[0] = ((i$1 >> 0));
 			$go((function(caps, s) { return function $b() {
-				var _r, _r$1, _r$2, cap, $s, $r;
-				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; cap = $f.cap; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				var _r, _r$1, _r$2, swimcap, $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; swimcap = $f.swimcap; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 				$r = new Swimmer(s[0]).arrive(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				_r = $recv(caps[0]); /* */ $s = 2; case 2: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-				cap = $clone(_r[0], Cap);
+				swimcap = $clone(_r[0], SwimCap);
 				_r$1 = fmt.Println(new sliceType([new Swimmer(s[0]), new $String("took a cap")])); /* */ $s = 3; case 3: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
 				_r$1;
 				$r = new Swimmer(s[0]).swim(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-				$r = $send(caps[0], $clone($clone(cap, Cap), Cap)); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				$r = $send(caps[0], $clone($clone(swimcap, SwimCap), SwimCap)); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				_r$2 = fmt.Println(new sliceType([new Swimmer(s[0]), new $String("gave a cap")])); /* */ $s = 6; case 6: if($c) { $c = false; _r$2 = _r$2.$blk(); } if (_r$2 && _r$2.$blk !== undefined) { break s; }
 				_r$2;
 				$r = leave(); /* */ $s = 7; case 7: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				$s = -1; return;
-				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f.cap = cap; $f.$s = $s; $f.$r = $r; return $f;
+				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f.swimcap = swimcap; $f.$s = $s; $f.$r = $r; return $f;
 			}; })(caps, s), []);
 			i$1 = i$1 + (1) >> 0;
 		/* } */ $s = 4; continue; case 5:
@@ -19982,7 +19982,7 @@ $packages["."] = (function() {
 		/* */ } return; } if ($f === undefined) { $f = { $blk: leave }; } $f._r = _r; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	Swimmer.methods = [{prop: "arrive", name: "arrive", pkg: ".", typ: $funcType([], [], false)}, {prop: "swim", name: "swim", pkg: ".", typ: $funcType([], [], false)}];
-	Cap.init("", []);
+	SwimCap.init("", []);
 	GymBag.init("", []);
 	$init = function() {
 		$pkg.$init = function() {};

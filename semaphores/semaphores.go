@@ -122,20 +122,20 @@ func nosync() {
 }
 
 func swimcaps() {
-	type Cap struct{}
-	caps := make(chan Cap, capacity)
+	type SwimCap struct{}
+	caps := make(chan SwimCap, capacity)
 	for i := 0; i < capacity; i++ {
-		caps <- Cap{}
+		caps <- SwimCap{}
 	}
 
 	for i := 0; i < swimmers; i++ {
 		s := Swimmer(i)
 		go func() {
 			s.arrive()
-			cap := <-caps
+			swimcap := <-caps
 			fmt.Println(s, "took a cap")
 			s.swim()
-			caps <- cap
+			caps <- swimcap
 			fmt.Println(s, "gave a cap")
 			leave()
 		}()
