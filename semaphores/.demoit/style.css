@@ -56,8 +56,8 @@ a, a:visited {
     height: 100vh;
     width: calc(100% - 40px);
     margin: 0 auto;
-    padding-top: 1.5em;
     /*
+    padding-top: 1.5em;
     */
 }
 
