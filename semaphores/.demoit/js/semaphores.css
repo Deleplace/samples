@@ -6,19 +6,9 @@ body {
 }
 
 #scene {
-    /*
-    position: absolute;
-    height: 100vh;
-    */
-    /*
-    margin-top: 200px;
-    */
     background-color: white;
     height: 400px;
     width: 1000px;
-    /*
-    border: solid 4px #FF000044;
-    */
 }
 
 #pool {
@@ -30,9 +20,6 @@ body {
 
 .swimmer {
     position: absolute;
-    /*
-    height: 50px;
-    */
     width: 75px;
 }
 
@@ -70,7 +57,7 @@ body {
 
 .safety {
     position: absolute;
-    margin-left: 980px;
+    margin-left: 900px;
     width: 120px;
     text-align: center;
     border: 4px #888 solid;

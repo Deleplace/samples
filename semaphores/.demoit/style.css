@@ -127,3 +127,9 @@ em {
     font-style: normal;
     color: rgb(0,122,204);
 }
+
+/* VDE */
+
+#nav a {
+    visibility: hidden;
+}
