@@ -45,30 +45,6 @@ func launchSimulation(Capacity, Swimmers int, Speed float64, Metaphor string) {
 	}
 }
 
-func lowTraffic() {
-	swimmers = 2
-	capacity = 1
-	// arrivalPeriod = 10000;
-	// minSwimDuration = 3000;
-	// maxSwimDuration = 10000;
-	speed = 2
-}
-
-func mediumTraffic() {
-	swimmers = 20
-	capacity = 10
-	speed = 2
-}
-
-func highTraffic() {
-	swimmers = 120
-	capacity = 20
-	// arrivalPeriod = 10000;
-	// minSwimDuration = 3000;
-	// maxSwimDuration = 10000;
-	speed = 2
-}
-
 func initJsSimulation() {
 	js.Global.Set("N", swimmers)
 	js.Global.Set("capacity", capacity)
@@ -107,13 +83,18 @@ func (s Swimmer) swim() {
 	sleep(time.Duration(durationMs+backDurationMs) * time.Millisecond)
 }
 
+func (s Swimmer) leave() {
+	fmt.Println("Leaving!")
+	wg.Done()
+}
+
 func nosync() {
 	for i := 0; i < swimmers; i++ {
 		s := Swimmer(i)
 		go func() {
 			s.arrive()
 			s.swim()
-			leave()
+			s.leave()
 		}()
 	}
 
@@ -137,7 +118,7 @@ func swimcaps() {
 			s.swim()
 			caps <- swimcap
 			fmt.Println(s, "gave a cap")
-			leave()
+			s.leave()
 		}()
 	}
 
@@ -158,22 +139,9 @@ func gymbags() {
 			s.swim()
 			<-shelf
 			fmt.Println(s, "took a gym bag")
-			leave()
+			s.leave()
 		}()
 	}
 
 	wg.Wait()
-}
-
-func arrive() {
-	sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
-}
-
-func swim() {
-	sleep(time.Duration(rand.Intn(400)) * time.Millisecond)
-}
-
-func leave() {
-	fmt.Println("Leaving!")
-	wg.Done()
 }
