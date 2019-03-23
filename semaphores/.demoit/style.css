@@ -145,13 +145,19 @@ h2 {
     padding-bottom: 3rem;
 }
 
+.link-blocks {
+    width:100%;
+}
+
 .thanks {
+    float: left;
     border: 1px solid #CCC;
     border-radius: 20px;
     min-width: 10rem;
     width: 40%;
     text-align: left;
     padding: 1rem;
+    margin-left: 4%;
 }
 
 .thanks h3 {
@@ -167,6 +173,7 @@ h2 {
 .thanks li {
     list-style-type: none;
     margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
 
 .thanks .fade {
