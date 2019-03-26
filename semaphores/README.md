@@ -1,6 +1,6 @@
 ## Swimming pool semaphores
 
-See online at http://35.239.85.154
+See online at http://35.224.214.137:5050/
 
 ### Prerequisites
 
