@@ -19,7 +19,7 @@ func BenchmarkProcess(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		inputFilename := "testdata/monalisa.jpg"
-		outputFilename := "out.png"
+		outputFilename := "testdata/out.png"
 
 		in, err := os.Open(inputFilename)
 		if err != nil {

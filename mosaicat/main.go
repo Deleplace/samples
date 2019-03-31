@@ -61,7 +61,8 @@ func process(in io.Reader, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	log.Println("Decoded a", format)
+	// log.Println("Decoded a", format)
+	_ = format
 
 	if srcW := src.Bounds().Max.X; srcW < *ncats {
 		return fmt.Errorf("Can't have input width (%d) less than ncats (%d)", srcW, *ncats)
