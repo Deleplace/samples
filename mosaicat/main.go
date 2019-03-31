@@ -6,7 +6,6 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	"image/gif"
 	_ "image/gif"
 	_ "image/jpeg"
 	"image/png"
@@ -200,7 +199,7 @@ func similarRGBA(c1, c2 color.RGBA) bool {
 }
 
 func isTransparentRGBA(c color.RGBA) bool {
-	return c.A <= 4
+	return c.A <= 10
 }
 
 // Produce 1 bright color + 1 dark color
@@ -250,25 +249,25 @@ var w, h int
 func init() {
 	// PNG cat
 	// f, err := os.Open("cat.png")
-	// f, err := os.Open("cat_transp.png")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// cat, _, err = image.Decode(f)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	f, err := os.Open("cat_transp.png")
+	if err != nil {
+		panic(err)
+	}
+	cat, _, err = image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
 
 	// GIF cat
-	f, err := os.Open("cat_transp.gif")
-	if err != nil {
-		panic(err)
-	}
-	g, err := gif.DecodeAll(f)
-	if err != nil {
-		panic(err)
-	}
-	cat = g.Image[0]
+	// f, err := os.Open("cat_transp.gif")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// g, err := gif.DecodeAll(f)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// cat = g.Image[0]
 }
 
 func usage() {
