@@ -1,7 +1,6 @@
-package main
+package mosaicat
 
 import (
-	"flag"
 	"fmt"
 	"image"
 	"image/color"
@@ -11,52 +10,10 @@ import (
 	"image/png"
 	_ "image/png"
 	"io"
-	"log"
-	"os"
-
-	"github.com/nfnt/resize"
 )
 
-var (
-	catwidth = flag.Int("catwidth", 32, "size of the side of a cat square")
-	ncats    = flag.Int("ncats", 20, "number of cats per line")
-)
-
-func main() {
-	flag.Parse()
-	w, h = *catwidth, *catwidth
-	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
-
-	if flag.NArg() != 2 {
-		log.Println(flag.NArg())
-		usage()
-	}
-
-	inputFilename := flag.Arg(0)
-	outputFilename := flag.Arg(1)
-
-	in, err := os.Open(inputFilename)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Couldn't open", inputFilename, "for reading:", err)
-		os.Exit(1)
-	}
-
-	out, err := os.OpenFile(outputFilename, os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Couldn't open", outputFilename, "for writing:", err)
-		os.Exit(2)
-	}
-
-	err = process(in, out)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Failed to process", inputFilename, ":", err)
-		os.Exit(3)
-	}
-
-	log.Println("Written", outputFilename)
-}
-
-func process(in io.Reader, out io.Writer) error {
+func Process(in io.Reader, out io.Writer, ncats int, catwidth int, smallcat image.Image) error {
+	w, h := catwidth, catwidth
 	src, format, err := image.Decode(in)
 	if err != nil {
 		return err
@@ -64,13 +21,13 @@ func process(in io.Reader, out io.Writer) error {
 	// log.Println("Decoded a", format)
 	_ = format
 
-	if srcW := src.Bounds().Max.X; srcW < *ncats {
-		return fmt.Errorf("Can't have input width (%d) less than ncats (%d)", srcW, *ncats)
+	if srcW := src.Bounds().Max.X; srcW < ncats {
+		return fmt.Errorf("Can't have input width (%d) less than ncats (%d)", srcW, ncats)
 	}
 
 	W, H := src.Bounds().Max.X, src.Bounds().Max.Y
 
-	WW := *ncats * *catwidth
+	WW := ncats * catwidth
 	HH := (WW * H) / W
 	dst := image.NewRGBA(image.Rect(0, 0, WW, HH))
 
@@ -79,14 +36,13 @@ func process(in io.Reader, out io.Writer) error {
 	for x := 0; x < WW; x += w {
 		for y := 0; y < HH; y += h {
 			c := src.At((x*W+w/2)/WW, (y*H+h/2)/HH)
-			colorcat := colorizeCat(c)
+			colorcat := colorizeCat(c, w, h, smallcat)
 			// log.Println("Drawing at", x, y)
 			dstR := image.Rect(x, y, x+w, y+h)
 			draw.Draw(dst, dstR, colorcat, image.ZP, draw.Over)
 		}
 	}
 
-	_ = smallcat
 	err = png.Encode(out, dst)
 	return err
 }
@@ -112,7 +68,7 @@ func avg(img image.Image, rect image.Rectangle) color.Color {
 	}
 }
 
-func colorizeCat(c color.Color) image.Image {
+func colorizeCat(c color.Color, w, h int, smallcat image.Image) image.Image {
 	// Replace 1 pixel at a time
 	cc := image.NewRGBA(image.Rect(0, 0, w, h))
 	blue := color.RGBA{
@@ -242,38 +198,4 @@ func colorPair(c color.Color) (hi, lo color.Color) {
 		A: uint8(a),
 	}
 	return hi, lo
-}
-
-var cat, smallcat image.Image
-var w, h int
-
-func init() {
-	// PNG cat
-	// f, err := os.Open("cat.png")
-	f, err := os.Open("cat_transp.png")
-	if err != nil {
-		panic(err)
-	}
-	cat, _, err = image.Decode(f)
-	if err != nil {
-		panic(err)
-	}
-
-	// GIF cat
-	// f, err := os.Open("cat_transp.gif")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// g, err := gif.DecodeAll(f)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// cat = g.Image[0]
-}
-
-func usage() {
-	fmt.Fprintln(os.Stderr, "Usage:")
-	fmt.Fprintln(os.Stderr, "\t", os.Args[0], "input", "output")
-	flag.PrintDefaults()
-	os.Exit(1)
 }

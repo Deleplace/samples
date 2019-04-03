@@ -1,7 +1,8 @@
-package main
+package mosaicat
 
 import (
 	"bytes"
+	"image"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
@@ -13,10 +14,11 @@ import (
 )
 
 func BenchmarkProcess(b *testing.B) {
-	*catwidth, *ncats = 32, 20
-	w, h = *catwidth, *catwidth
-	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+	catwidth, ncats := 32, 20
+	w, h := catwidth, catwidth
+	smallcat := resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
 
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		inputFilename := "testdata/monalisa.jpg"
 		outputFilename := "testdata/out.png"
@@ -33,7 +35,7 @@ func BenchmarkProcess(b *testing.B) {
 			return
 		}
 
-		err = process(in, out)
+		err = Process(in, out, ncats, catwidth, smallcat)
 		if err != nil {
 			b.Fatal("Failed to process", inputFilename, ":", err)
 			return
@@ -42,9 +44,9 @@ func BenchmarkProcess(b *testing.B) {
 }
 
 func BenchmarkProcessInMemory(b *testing.B) {
-	*catwidth, *ncats = 32, 20
-	w, h = *catwidth, *catwidth
-	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+	catwidth, ncats := 32, 20
+	w, h := catwidth, catwidth
+	smallcat := resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
 	inputFilename := "testdata/monalisa.jpg"
 
 	indata, err := ioutil.ReadFile(inputFilename)
@@ -59,7 +61,7 @@ func BenchmarkProcessInMemory(b *testing.B) {
 		in := bytes.NewBuffer(indata)
 		out := bytes.NewBuffer(outmem)
 
-		err = process(in, out)
+		err = Process(in, out, ncats, catwidth, smallcat)
 		if err != nil {
 			b.Fatal("Failed to process", inputFilename, ":", err)
 			return
@@ -68,9 +70,9 @@ func BenchmarkProcessInMemory(b *testing.B) {
 }
 
 func BenchmarkProcessLargeInMemory(b *testing.B) {
-	*catwidth, *ncats = 128, 50
-	w, h = *catwidth, *catwidth
-	smallcat = resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
+	catwidth, ncats := 128, 50
+	w, h := catwidth, catwidth
+	smallcat := resize.Resize(uint(w), uint(h), cat, resize.Lanczos3)
 	inputFilename := "testdata/monalisa.jpg"
 
 	indata, err := ioutil.ReadFile(inputFilename)
@@ -85,10 +87,36 @@ func BenchmarkProcessLargeInMemory(b *testing.B) {
 		in := bytes.NewBuffer(indata)
 		out := bytes.NewBuffer(outmem)
 
-		err = process(in, out)
+		err = Process(in, out, ncats, catwidth, smallcat)
 		if err != nil {
 			b.Fatal("Failed to process", inputFilename, ":", err)
 			return
 		}
 	}
+}
+
+var cat image.Image
+
+func init() {
+	// PNG cat
+	// f, err := os.Open("cat.png")
+	f, err := os.Open("cat_transp.png")
+	if err != nil {
+		panic(err)
+	}
+	cat, _, err = image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
+
+	// GIF cat
+	// f, err := os.Open("cat_transp.gif")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// g, err := gif.DecodeAll(f)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// cat = g.Image[0]
 }
