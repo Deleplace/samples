@@ -84,7 +84,8 @@ func process(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	log.Println("Processing successful in", time.Since(start))
+	log.Println("Processed successfully in", time.Since(start))
+	log.Println("Writing mosaic of", result.Len(), "bytes")
 	result.WriteTo(w)
 }
 
