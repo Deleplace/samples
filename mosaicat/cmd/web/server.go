@@ -26,6 +26,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/Deleplace/samples/mosaicat"
 	"github.com/nfnt/resize"
@@ -73,6 +74,7 @@ func process(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Processing picture of size %d\n", n)
+	start := time.Now()
 	ww, hh := catwidth, catwidth
 	smallcat := resize.Resize(uint(ww), uint(hh), cat, resize.Lanczos3)
 
@@ -82,7 +84,7 @@ func process(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	log.Println("Processing successful!")
+	log.Println("Processing successful in", time.Since(start))
 	result.WriteTo(w)
 }
 
