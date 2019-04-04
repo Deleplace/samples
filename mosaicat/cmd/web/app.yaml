@@ -17,3 +17,5 @@ runtime: go111
 handlers:
 - url: /.*
   script: auto
+
+instance_class: F4_1G
