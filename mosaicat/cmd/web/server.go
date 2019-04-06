@@ -35,7 +35,14 @@ import (
 func main() {
 	http.HandleFunc("/", form)
 	http.HandleFunc("/process", process)
-	err := http.ListenAndServe(":8080", nil)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("Listening on port %s", port)
+	err := http.ListenAndServe(":"+port, nil)
 	log.Fatal(err)
 }
 
