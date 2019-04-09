@@ -24,6 +24,7 @@ import (
 	"image/png"
 	_ "image/png"
 	"io"
+	"log"
 )
 
 func Process(in io.Reader, out io.Writer, ncats int, catwidth int, smallcat image.Image) error {
@@ -47,6 +48,7 @@ func Process(in io.Reader, out io.Writer, ncats int, catwidth int, smallcat imag
 
 	// draw.Draw(dst, dst.Bounds(), src, image.ZP, draw.Src)
 
+	log.Printf("Applying %d cats...", ncats*((HH+catwidth-1)/catwidth))
 	for x := 0; x < WW; x += w {
 		for y := 0; y < HH; y += h {
 			c := src.At((x*W+w/2)/WW, (y*H+h/2)/HH)
@@ -57,7 +59,9 @@ func Process(in io.Reader, out io.Writer, ncats int, catwidth int, smallcat imag
 		}
 	}
 
+	log.Printf("Encoding in PNG...")
 	err = png.Encode(out, dst)
+	log.Printf("Done encoding in PNG.")
 	return err
 }
 

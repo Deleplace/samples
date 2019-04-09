@@ -85,15 +85,12 @@ func process(w http.ResponseWriter, r *http.Request) {
 	ww, hh := catwidth, catwidth
 	smallcat := resize.Resize(uint(ww), uint(hh), cat, resize.Lanczos3)
 
-	var result bytes.Buffer
-	err = mosaicat.Process(&pic, &result, ncats, catwidth, smallcat)
+	err = mosaicat.Process(&pic, w, ncats, catwidth, smallcat)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
 	}
 	log.Println("Processed successfully in", time.Since(start))
-	log.Println("Writing mosaic of", result.Len(), "bytes")
-	result.WriteTo(w)
 }
 
 var cat image.Image
