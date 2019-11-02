@@ -7,6 +7,8 @@ body {
     font-size: 2rem;
     font-family: sans-serif;
     color: rgb(51, 51, 51);
+
+    overflow: hidden;
 }
 
 h1 {
