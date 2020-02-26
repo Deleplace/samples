@@ -9,11 +9,6 @@ See online at http://35.224.214.137:5050/
 - Go ≥ 1.11
 - [Demoit](https://github.com/dgageot/demoit)
 
-### To modify the simulation
-
-- [GopherJS](https://github.com/gopherjs/gopherjs)
-
-
 ### Installation
 
 ```
@@ -24,3 +19,12 @@ demoit
 ```
 
 Then open your browser at localhost:8888
+
+### To modify the simulation
+
+Install [GopherJS](https://github.com/gopherjs/gopherjs) and build the JavaScript parth of the application.
+
+```
+go get -u github.com/gopherjs/gopherjs
+gopherjs build -o js/semaphores.js
+```
