@@ -48,10 +48,11 @@ func BenchmarkFlipF(b *testing.B) {
 		flipAllF(pics)
 	}
 }
-func BenchmarkFlipG(b *testing.B) {
-	pics := readPictures()
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		flipAllG(pics)
-	}
-}
+
+// func BenchmarkFlipG(b *testing.B) {
+// 	pics := readPictures()
+// 	b.ResetTimer()
+// 	for i := 0; i < b.N; i++ {
+// 		flipAllG(pics)
+// 	}
+// }
